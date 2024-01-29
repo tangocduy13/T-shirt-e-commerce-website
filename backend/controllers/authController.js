@@ -3,7 +3,6 @@ import { registerUser } from "../repositories/userRepository.js";
 const register = async (req, res) => {
   try {
     const { phoneNumber } = req.body;
-    console.log(phoneNumber);
     await registerUser({ phone: phoneNumber });
     return res.status(201).json({
       message: "ok",

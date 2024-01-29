@@ -13,7 +13,14 @@ const MongoURL = process.env.MongoDBURL;
 
 const app = express();
 
-app.use(cors());
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
+    credentials: true,
+    allowedHeader: ["Content-Type"],
+  }),
+);
 app.use(express.json());
 app.use(cookieParser());
 
