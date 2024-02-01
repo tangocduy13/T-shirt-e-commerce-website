@@ -1,21 +1,32 @@
 import { Card, Input, Button, Typography } from "@material-tailwind/react";
 import { useState } from "react";
-import api from "../../helpers/api.js";
+import axiosUser from "../../helpers/api.js";
 
 const SignUp = () => {
   const [phoneNumber, setPhoneNumber] = useState("");
+  const [password, setPassword] = useState("");
+  const [passwordConfirm, setPasswordConfirm] = useState("");
   const handleSignUp = async () => {
-    await api
-      .post("/register", { phoneNumber })
+    const data = {
+      phoneNumber,
+      password,
+      passwordConfirm,
+    };
+    await axiosUser
+      .post("/register", data)
       .then((response) => {
         const message = response.data.message;
         console.log(message);
         setPhoneNumber("");
+        setPassword("");
+        setPasswordConfirm("");
       })
       .catch((e) => {
         if (e.response) {
           console.log(e.response.data.message);
         }
+        setPassword("");
+        setPasswordConfirm("");
         setPhoneNumber("");
       });
   };
@@ -43,6 +54,42 @@ const SignUp = () => {
               value={phoneNumber}
               onChange={(event) => {
                 setPhoneNumber(event.target.value);
+              }}
+            />
+          </div>
+          <div className="mb-1 flex flex-col gap-6">
+            <Typography variant="h6" color="blue-gray" className="-mb-3">
+              Your Password
+            </Typography>
+            <Input
+              size="lg"
+              placeholder="Enter your password"
+              className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
+              labelProps={{
+                className: "before:content-none after:content-none",
+              }}
+              value={password}
+              type={"password"}
+              onChange={(event) => {
+                setPassword(event.target.value);
+              }}
+            />
+          </div>
+          <div className="mb-1 flex flex-col gap-6">
+            <Typography variant="h6" color="blue-gray" className="-mb-3">
+              Your Password Confirm
+            </Typography>
+            <Input
+              size="lg"
+              placeholder="Confirm your password"
+              className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
+              labelProps={{
+                className: "before:content-none after:content-none",
+              }}
+              value={passwordConfirm}
+              type={"password"}
+              onChange={(event) => {
+                setPasswordConfirm(event.target.value);
               }}
             />
           </div>

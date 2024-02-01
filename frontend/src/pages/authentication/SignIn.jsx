@@ -1,7 +1,29 @@
-import React from "react";
+import React, { useState } from "react";
 import { Button, Card, Input, Typography } from "@material-tailwind/react";
+import axiosUser from "../../helpers/api.js";
+import { useNavigate } from "react-router-dom";
 
 const SignIn = () => {
+  const navigate = useNavigate();
+  const [accountName, setAccountName] = useState("");
+  const [password, setPassword] = useState("");
+
+  const handleLogin = async () => {
+    const data = { accountName, password };
+    await axiosUser
+      .post("/login", data)
+      .then((response) => {
+        navigate("/products", { state: { message: "Xin chao Duy" } });
+      })
+      .catch((error) => {
+        if (error.response) {
+          console.log(error.response.data.message);
+        }
+        setAccountName("");
+        setPassword("");
+      });
+  };
+
   return (
     <div className={"flex justify-center justify-items-center"}>
       <Card color="transparent" shadow={false}>
@@ -23,6 +45,8 @@ const SignIn = () => {
               labelProps={{
                 className: "before:content-none after:content-none",
               }}
+              value={accountName}
+              onChange={(event) => setAccountName(event.target.value)}
             />
             <Typography variant="h6" color="blue-gray" className="-mb-3">
               Your Password
@@ -35,9 +59,11 @@ const SignIn = () => {
               labelProps={{
                 className: "before:content-none after:content-none",
               }}
+              value={password}
+              onChange={(event) => setPassword(event.target.value)}
             />
           </div>
-          <Button className="mt-6" fullWidth>
+          <Button className="mt-6" fullWidth onClick={handleLogin}>
             sign in
           </Button>
           <Typography color="gray" className="mt-4 text-center font-normal">
