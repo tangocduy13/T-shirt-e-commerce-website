@@ -2,20 +2,25 @@ import React, { useState } from "react";
 import { Button, Card, Input, Typography } from "@material-tailwind/react";
 import axiosUser from "../../helpers/api.js";
 import { useNavigate } from "react-router-dom";
+import { CgSpinner } from "react-icons/cg";
 
 const SignIn = () => {
   const navigate = useNavigate();
   const [accountName, setAccountName] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleLogin = async () => {
+    setLoading(true);
     const data = { accountName, password };
     await axiosUser
       .post("/login", data)
       .then((response) => {
+        setLoading(false);
         navigate("/products", { state: { message: "Xin chao Duy" } });
       })
       .catch((error) => {
+        setLoading(false);
         if (error.response) {
           console.log(error.response.data.message);
         }
@@ -63,7 +68,12 @@ const SignIn = () => {
               onChange={(event) => setPassword(event.target.value)}
             />
           </div>
-          <Button className="mt-6" fullWidth onClick={handleLogin}>
+          <Button
+            className="mt-6 flex items-center justify-center h-10"
+            fullWidth
+            onClick={handleLogin}
+          >
+            {loading && <CgSpinner size={20} className={"mt-1 animate-spin"} />}
             sign in
           </Button>
           <Typography color="gray" className="mt-4 text-center font-normal">
