@@ -1,8 +1,7 @@
 import pool from "../helper/connectToDB.js";
-import brypt from "bcrypt";
 import bcrypt from "bcrypt";
 const registerUser = async ({ phone, password }) => {
-  const hashPassword = await brypt.hash(password, 10);
+  const hashPassword = await bcrypt.hash(password, 10);
   const [ResultSetHeader] = await pool.execute(
     `insert into user (phone, password) values ('${phone}', '${hashPassword}')`,
   );
